@@ -28,7 +28,7 @@ const AppProvider = ({ children }) => {
   //fetch stories
 
   const fetchStories = async (url) => {
-    dispatch({ type: "SET_LOADING" });
+    dispatch({ type: SET_LOADING });
 
     try {
       const response = await fetch(url);
@@ -55,15 +55,23 @@ const AppProvider = ({ children }) => {
     dispatch({ type: HANDLE_SEARCH, payload: query });
   };
 
+  // func for prev and next buttton to switch pages
+
+  const handlePage = (value) => {
+    dispatch({ type: HANDLE_PAGE, payload: value });
+  };
+
   //useEffect
 
   useEffect(() => {
     fetchStories(`${API_ENDPOINT}query=${state.query}&page=${state.page} `);
     //eslint-disable-next-line
-  }, [state.query]);
+  }, [state.query, state.page]);
 
   return (
-    <AppContext.Provider value={{ ...state, removeStory, handleSearch }}>
+    <AppContext.Provider
+      value={{ ...state, removeStory, handleSearch, handlePage }}
+    >
       {children}
     </AppContext.Provider>
   );
